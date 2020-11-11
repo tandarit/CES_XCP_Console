@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 namespace CES_XCP_Console.Model
 {
     public class XCPEnviroment :INotifyPropertyChanged
-    {
-        private byte[] nmDummyContent; 
+    {    
 
         public String Name
         {
@@ -47,12 +46,48 @@ namespace CES_XCP_Console.Model
             get;
             set;
         }
-        public byte[] NMDummyContent
+        public byte NMDummyContent0
         {
-            get { return nmDummyContent; }
-            set { nmDummyContent = value; }
+            get;
+            set;
         }
-        public byte RepeatTime
+        public byte NMDummyContent1
+        {
+            get;
+            set;
+        }
+        public byte NMDummyContent2
+        {
+            get;
+            set;
+        }
+        public byte NMDummyContent3
+        {
+            get;
+            set;
+        }
+        public byte NMDummyContent4
+        {
+            get;
+            set;
+        }
+        public byte NMDummyContent5
+        {
+            get;
+            set;
+        }
+        public byte NMDummyContent6
+        {
+            get;
+            set;
+        }
+        public byte NMDummyContent7
+        {
+            get;
+            set;
+        }
+
+        public uint RepeatTime
         {
             get;
             set;

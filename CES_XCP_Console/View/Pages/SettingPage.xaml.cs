@@ -24,8 +24,9 @@ namespace CES_XCP_Console.View.Pages
         public SettingPage()
         {
             InitializeComponent();
-            this.DataContext = new SettingPageVM();
+           
         }
 
+        
     }
 }

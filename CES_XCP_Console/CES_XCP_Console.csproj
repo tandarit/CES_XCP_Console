@@ -99,6 +99,9 @@
     <Compile Include="Model\IBaseModule.cs" />
     <Compile Include="Model\XCPEnviroment.cs" />
     <Compile Include="VectorCAN\VectorCan.cs" />
+    <Compile Include="ViewModel\Coverters\HexStringToByteConverter.cs" />
+    <Compile Include="ViewModel\Coverters\HexStringToUintCoverter.cs" />
+    <Compile Include="ViewModel\Coverters\StringToUintConverter.cs" />
     <Compile Include="ViewModel\MainWindowVM.cs" />
     <Compile Include="ViewModel\MyICommand.cs" />
     <Compile Include="ViewModel\SettingPageVM.cs" />

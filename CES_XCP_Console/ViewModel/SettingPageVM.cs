@@ -9,52 +9,86 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Serialization;
 using CES_XCP_Console.Model;
+using Microsoft.Win32;
 
 namespace CES_XCP_Console.ViewModel
 {
     class SettingPageVM
-    {
-        
+    {        
         public MyICommand SaveCommand { get; set; }
+        public MyICommand OpenA2lCommand { get; set; }
+        public MyICommand OpenArXMLCommand { get; set; }
+
+        public XCPEnviroment xcpEnv;
 
         public SettingPageVM()
         {
-            ArbitDataRateList = new ObservableCollection<string>()
+            ArbitDataRateList = new List<string>()
             {
                 "20",
                 "125",
                 "500",
                 "1000"
             };
-            DataDataRateList = new ObservableCollection<string>()
+            DataDataRateList = new List<string>()
             {
                 "100",
                 "1000",
                 "2000",
                 "8000"
             };
+
+            xcpEnv = new XCPEnviroment();
            
             SaveCommand = new MyICommand(OnSave, CanSave);
+            OpenA2lCommand = new MyICommand(OnOpenA2L, CanOpenA2L);
+            OpenArXMLCommand = new MyICommand(OnOpenArXML, CanOpenArXML);
         }
 
         private void OnSave()
         {
-            
             SaveEnviromentSettings("EnvConfig.xml");
+            MessageBox.Show("Enviroment was saved!");
         }
 
         private bool CanSave()
         {
+            return true;
+        }
 
+        private void OnOpenA2L()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();            
+            openFileDialog.Filter= "A2L file (*.a2l)|*.a2l|All files(*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                xcpEnv.A2LFile = openFileDialog.FileName;
+            }
+        }
+
+        private bool CanOpenA2L()
+        {
+            return true;
+        }
+
+        private void OnOpenArXML()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "ArXML file(*.arxml)|*.arxml|All files(*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                xcpEnv.ArXMLFile = openFileDialog.FileName;
+            }
+        }
+
+        private bool CanOpenArXML()
+        {
             return true;
         }
 
         private void SaveEnviromentSettings(string fileName)
         {
-            XCPEnviroment xcpEnv = new XCPEnviroment();
-
-
-            using(var stream=new FileStream(fileName, FileMode.Create))
+            using (var stream=new FileStream(fileName, FileMode.Create))
             {
                 XmlSerializer xml = new XmlSerializer(typeof(XCPEnviroment));
                 xml.Serialize(stream, xcpEnv);
@@ -63,7 +97,7 @@ namespace CES_XCP_Console.ViewModel
         }
 
         private XCPEnviroment LoadEnviromentSettings(string fileName) {
-            XCPEnviroment xcpEnv;
+            XCPEnviroment xcpEnv; 
             using (var stream = new FileStream("EnvConf.xml", FileMode.Open))
             {
                 XmlSerializer xml = new XmlSerializer(typeof(XCPEnviroment));
@@ -74,71 +108,28 @@ namespace CES_XCP_Console.ViewModel
 
         }
 
-        //List of bitrate
+        //List of DataBinding properies:
         
-        public ObservableCollection<string> ArbitDataRateList
+        public List<string> ArbitDataRateList
         {
             get;set;
         }
 
-        public ObservableCollection<string> DataDataRateList
+        public List<string> DataDataRateList
         {
             get;set;
         }
 
-        private byte[] nmDummyContent;
-
-        public String Name
+        public XCPEnviroment XCPEnviroment
         {
-            get;
-            set;
-        }
-
-        public bool IsCanFd
-        {
-            get;
-            set;
-        }
-        public uint ArbitrationBitrate
-        {
-            get;
-            set;
-        }
-        public uint DataBitrate
-        {
-            get;
-            set;
-        }
-        public String A2LFile
-        {
-            get;
-            set;
-        }
-        public String ArXMLFile
-        {
-            get;
-            set;
-        }
-        public uint NMDummyID
-        {
-            get;
-            set;
-        }
-       
-        public byte RepeatTime
-        {
-            get;
-            set;
-        }
-        public uint XCPReq
-        {
-            get;
-            set;
-        }
-        public uint XCPRes
-        {
-            get;
-            set;
+            get
+            {
+                return xcpEnv;
+            }
+            set
+            {
+                xcpEnv = value;
+            }
         }
     }
 }

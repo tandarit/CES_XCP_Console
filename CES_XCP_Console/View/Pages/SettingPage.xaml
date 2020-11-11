@@ -4,11 +4,20 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:CES_XCP_Console.View.Pages"
-      xmlns:model="clr-namespace:CES_XCP_Console.Model"
       xmlns:vm="clr-namespace:CES_XCP_Console.ViewModel"
+      xmlns:converters="clr-namespace:CES_XCP_Console.ViewModel.Coverters"
       mc:Ignorable="d" 
       d:DesignHeight="500" d:DesignWidth="800"
       Title="PageSetting">
+    <Page.Resources>
+        <converters:HexStringToUintCoverter x:Key="HexString2Uint" />
+        <converters:StringToUintConverter x:Key="String2Uint" />
+        <converters:HexStringToByteConverter x:Key="HexString2Byte" />
+    </Page.Resources>
+
+    <Page.DataContext>
+        <vm:SettingPageVM />
+    </Page.DataContext>
 
     <StackPanel Orientation="Vertical" Background="#FFEEEEEE">
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -17,18 +26,18 @@
 
         <StackPanel Orientation="Horizontal" Margin="5">
             <TextBlock Margin="5">Enviroment name</TextBlock>
-            <TextBox x:Name="tbEnviromentName" Text="{Binding Name, Mode=TwoWay}"  Margin="5" Width="240"></TextBox>
+            <TextBox x:Name="tbEnviromentName" Text="{Binding Path=XCPEnviroment.Name, Mode=TwoWay}"  Margin="5" Width="240"></TextBox>
         </StackPanel>
 
         <GroupBox Header="Can Settings">
             <StackPanel>
-                <CheckBox x:Name="cbIsCanFd" Content="Is CANFD" IsChecked="{Binding IsCanFd, Mode=TwoWay}"></CheckBox>
+                <CheckBox x:Name="cbIsCanFd" Content="Is CANFD" IsChecked="{Binding Path=XCPEnviroment.IsCanFd, Mode=TwoWay}"></CheckBox>
                 <TextBlock>Arbitation bitrate (kbit/s)</TextBlock>
-                <ComboBox x:Name="cobArbBitrate" ItemsSource="{Binding ArbitDataRateList}" SelectedValue="{Binding ArbitrationBitrate, Mode=TwoWay}" />
+                <ComboBox x:Name="cobArbBitrate" ItemsSource="{Binding ArbitDataRateList}" SelectedItem="{Binding Path=XCPEnviroment.ArbitrationBitrate, Converter={StaticResource String2Uint}, Mode=TwoWay}" />
 
 
                 <TextBlock>Data bitrate (kbit/s)</TextBlock>
-                <ComboBox x:Name="cobDataBitrate" ItemsSource="{Binding DataDataRateList}" SelectedValue="{Binding DataBitrate, Mode=TwoWay}" />
+                <ComboBox x:Name="cobDataBitrate" ItemsSource="{Binding DataDataRateList}" SelectedItem="{Binding Path=XCPEnviroment.DataBitrate, Converter={StaticResource String2Uint}, Mode=TwoWay}" />
 
 
 
@@ -39,43 +48,47 @@
             <StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <TextBlock Margin="5">A2L file location:</TextBlock>
-                    <TextBlock Margin="5">None</TextBlock>
-                    <Button Margin="5" Content="Brower" />
+                    <TextBlock Margin="5" Text="{Binding Path=XCPEnviroment.A2LFile, Mode=TwoWay}">None</TextBlock>
+                    <Button Margin="5" Content="Brower" Command="{Binding OpenA2lCommand}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <TextBlock Margin="5">ArXML file location:</TextBlock>
-                    <TextBlock Margin="5">None</TextBlock>
-                    <Button Margin="5" Content="Brower" />
+                    <TextBlock Margin="5" Text="{Binding Path=XCPEnviroment.ArXMLFile, Mode=TwoWay}">None</TextBlock>
+                    <Button Margin="5" Content="Brower" Command="{Binding OpenArXMLCommand}" />
                 </StackPanel>
             </StackPanel>
         </GroupBox>
 
         <GroupBox Header="NM__Dummy settings">
             <StackPanel>
-                <StackPanel Orientation="Horizontal">                
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Margin="5">NM_Dummy Id (HEX):</TextBlock>
-                    <TextBox x:Name="nm_dummy_id" Margin="5">14420FFF</TextBox>
+                    <TextBox x:Name="tbNMDummyId" Margin="5" Width="75" Text="{Binding Path=XCPEnviroment.NMDummyID, Converter={StaticResource HexString2Uint}, Mode=TwoWay}"></TextBox>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="5">                
-                    <StackPanel Orientation="Horizontal" Margin="5">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <StackPanel Orientation="Horizontal" Margin="5" RenderTransformOrigin="0.5,0.5" Width="542" Height="27">
+                        
                         <TextBlock Margin="5">0:</TextBlock>
-                        <TextBox MaxLength="2" Text="00" Margin="5"/>
+                        <TextBox x:Name ="tbNMDummy0"  MaxLength="2" Text="{Binding Path=XCPEnviroment.NMDummyContent0, Converter={StaticResource HexString2Byte}, Mode=TwoWay}" Margin="5"/>
                         <TextBlock Margin="5">1:</TextBlock>
-                        <TextBox MaxLength="2" Text="00" Margin="5"/>
+                        <TextBox x:Name ="tbNMDummy1" MaxLength="2" Text="{Binding Path=XCPEnviroment.NMDummyContent1, Converter={StaticResource HexString2Byte}, Mode=TwoWay}" Margin="5"/>
                         <TextBlock Margin="5">2:</TextBlock>
-                        <TextBox MaxLength="2" Text="00" Margin="5"/>
+                        <TextBox x:Name ="tbNMDummy2" MaxLength="2" Text="{Binding Path=XCPEnviroment.NMDummyContent2, Converter={StaticResource HexString2Byte}, Mode=TwoWay}" Margin="5"/>
                         <TextBlock Margin="5">3:</TextBlock>
-                        <TextBox MaxLength="2" Text="00" Margin="5"/>
+                        <TextBox x:Name ="tbNMDummy3" MaxLength="2" Text="{Binding Path=XCPEnviroment.NMDummyContent3, Converter={StaticResource HexString2Byte}, Mode=TwoWay}" Margin="5"/>
                         <TextBlock Margin="5">4:</TextBlock>
-                        <TextBox MaxLength="2" Text="00" Margin="5"/>
+                        <TextBox x:Name ="tbNMDummy4" MaxLength="2" Text="{Binding Path=XCPEnviroment.NMDummyContent4, Converter={StaticResource HexString2Byte}, Mode=TwoWay}" Margin="5"/>
                         <TextBlock Margin="5">5:</TextBlock>
-                        <TextBox MaxLength="2" Text="00" Margin="5"/>
+                        <TextBox x:Name ="tbNMDummy5" MaxLength="2" Text="{Binding Path=XCPEnviroment.NMDummyContent5, Converter={StaticResource HexString2Byte}, Mode=TwoWay}" Margin="5"/>
                         <TextBlock Margin="5">6:</TextBlock>
-                        <TextBox MaxLength="2" Text="00" Margin="5"/>
+                        <TextBox x:Name ="tbNMDummy6" MaxLength="2" Text="{Binding Path=XCPEnviroment.NMDummyContent6, Converter={StaticResource HexString2Byte}, Mode=TwoWay}" Margin="5"/>
                         <TextBlock Margin="5">7:</TextBlock>
-                        <TextBox MaxLength="2" Text="00" Margin="5"/>
-                        <TextBlock Margin="5">Repeat time (s):</TextBlock>
-                        <Slider Minimum="1"  Width="100" Margin="5"/>
+                        <TextBox x:Name ="tbNMDummy7" MaxLength="2" Text="{Binding Path=XCPEnviroment.NMDummyContent7, Converter={StaticResource HexString2Byte}, Mode=TwoWay}" Margin="5"/>
+                        <TextBlock Margin="5" >Repeat time (s):</TextBlock>
+                        <TextBox x:Name="tbRepeatTime" Text="{Binding Path=XCPEnviroment.RepeatTime, Converter={StaticResource String2Uint}, Mode=TwoWay}" MaxLength="2" Width="25" Margin="5" />
+                        <!-- <Slider x:Name ="slNMDummyRepeatTime" Minimum="10"  Width="100" Margin="5" Maximum="50" TickFrequency="10"  />
+                        <TextBlock TextWrapping="Wrap" Margin="5" Text="{Binding ElementName=slNMDummyRepeatTime, Path=Value, UpdateSourceTrigger=PropertyChanged}"/>
+                    -->
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
@@ -85,12 +98,12 @@
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Margin="5">XCP Req Id (HEX):</TextBlock>
-                    <TextBox x:Name="xcp_req_id" Margin="5">18E19809</TextBox>
+                    <TextBox x:Name="tbXCPReqId" Width="75" Margin="5" Text="{Binding Path=XCPEnviroment.XCPReq, Converter={StaticResource HexString2Uint}, Mode=TwoWay}"></TextBox>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Margin="5">XCP Res Id (HEX):</TextBlock>
-                    <TextBox x:Name="xcp_res_id" Margin="5">18E19808</TextBox>
+                    <TextBox x:Name="tbXCPResId" Width="75" Margin="5" Text="{Binding Path=XCPEnviroment.XCPRes, Converter={StaticResource HexString2Uint}, Mode=TwoWay}"></TextBox>
                 </StackPanel>
 
             </StackPanel>
@@ -99,6 +112,6 @@
         <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
             <Button Content="Save Configuration" Margin="5" Command="{Binding SaveCommand}" />
         </StackPanel>
-        
+
     </StackPanel>
 </Page>
