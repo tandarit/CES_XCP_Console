@@ -11,6 +11,7 @@ using System.Xml.Serialization;
 using CES_XCP_Console.Model;
 using Microsoft.Win32;
 
+
 namespace CES_XCP_Console.ViewModel
 {
     class SettingPageVM
@@ -18,11 +19,13 @@ namespace CES_XCP_Console.ViewModel
         public MyICommand SaveCommand { get; set; }
         public MyICommand OpenA2lCommand { get; set; }
         public MyICommand OpenArXMLCommand { get; set; }
+        public MyICommand OpenOwnDatabaseCommand { get; set; }
 
         public XCPEnviroment xcpEnv;
 
         public SettingPageVM()
         {
+            
             ArbitDataRateList = new List<string>()
             {
                 "20",
@@ -38,16 +41,43 @@ namespace CES_XCP_Console.ViewModel
                 "8000"
             };
 
-            xcpEnv = new XCPEnviroment();
+            if (MainWindowVM.sXcpEnv != null)
+                xcpEnv = MainWindowVM.sXcpEnv;
+            else
+                xcpEnv = new XCPEnviroment();
            
             SaveCommand = new MyICommand(OnSave, CanSave);
             OpenA2lCommand = new MyICommand(OnOpenA2L, CanOpenA2L);
             OpenArXMLCommand = new MyICommand(OnOpenArXML, CanOpenArXML);
+            OpenOwnDatabaseCommand = new MyICommand(OnOpenOwnDatabase, CanOpenOwnDatabase);
         }
 
         private void OnSave()
         {
-            SaveEnviromentSettings("EnvConfig.xml");
+            String fileName;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = ".xml files (*.xml)|*.xml|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 2;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == true)
+            {
+                fileName = saveFileDialog1.FileName;
+                using (var myStream = new FileStream(fileName, FileMode.Create))
+                {
+                        XmlSerializer xml = new XmlSerializer(typeof(XCPEnviroment));
+                        xml.Serialize(myStream, xcpEnv);
+                        myStream.Close();
+
+                        //Save to registry
+                        RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\CES_XCP_Console");
+                        key.SetValue("ConfigFilePath", fileName);
+                        key.Close();
+                }                    
+            }
+
+            //SaveEnviromentSettings();
             MessageBox.Show("Enviroment was saved!");
         }
 
@@ -86,26 +116,20 @@ namespace CES_XCP_Console.ViewModel
             return true;
         }
 
-        private void SaveEnviromentSettings(string fileName)
+        private void OnOpenOwnDatabase()
         {
-            using (var stream=new FileStream(fileName, FileMode.Create))
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "XML file(*.xml)|*.xml|All files(*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
             {
-                XmlSerializer xml = new XmlSerializer(typeof(XCPEnviroment));
-                xml.Serialize(stream, xcpEnv);
-                stream.Close();
+                xcpEnv.OwnDatabaseFile = openFileDialog.FileName;
             }
         }
 
-        private XCPEnviroment LoadEnviromentSettings(string fileName) {
-            XCPEnviroment xcpEnv; 
-            using (var stream = new FileStream("EnvConf.xml", FileMode.Open))
-            {
-                XmlSerializer xml = new XmlSerializer(typeof(XCPEnviroment));
-                xcpEnv=(XCPEnviroment)xml.Deserialize(stream);
-                stream.Close();
-            }
-            return xcpEnv;
-
+        private bool CanOpenOwnDatabase()
+        {
+            //TODO
+            return true;
         }
 
         //List of DataBinding properies:

@@ -7,7 +7,7 @@
       xmlns:vm="clr-namespace:CES_XCP_Console.ViewModel"
       xmlns:converters="clr-namespace:CES_XCP_Console.ViewModel.Coverters"
       mc:Ignorable="d" 
-      d:DesignHeight="500" d:DesignWidth="800"
+      d:DesignHeight="550" d:DesignWidth="800"
       Title="PageSetting">
     <Page.Resources>
         <converters:HexStringToUintCoverter x:Key="HexString2Uint" />
@@ -38,9 +38,6 @@
 
                 <TextBlock>Data bitrate (kbit/s)</TextBlock>
                 <ComboBox x:Name="cobDataBitrate" ItemsSource="{Binding DataDataRateList}" SelectedItem="{Binding Path=XCPEnviroment.DataBitrate, Converter={StaticResource String2Uint}, Mode=TwoWay}" />
-
-
-
             </StackPanel>
         </GroupBox>
 
@@ -48,12 +45,12 @@
             <StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <TextBlock Margin="5">A2L file location:</TextBlock>
-                    <TextBlock Margin="5" Text="{Binding Path=XCPEnviroment.A2LFile, Mode=TwoWay}">None</TextBlock>
+                    <TextBlock Margin="5" Text="{Binding Path=XCPEnviroment.A2LFile, Mode=TwoWay}"/> 
                     <Button Margin="5" Content="Brower" Command="{Binding OpenA2lCommand}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <TextBlock Margin="5">ArXML file location:</TextBlock>
-                    <TextBlock Margin="5" Text="{Binding Path=XCPEnviroment.ArXMLFile, Mode=TwoWay}">None</TextBlock>
+                    <TextBlock Margin="5" Text="{Binding Path=XCPEnviroment.ArXMLFile, Mode=TwoWay}" />
                     <Button Margin="5" Content="Brower" Command="{Binding OpenArXMLCommand}" />
                 </StackPanel>
             </StackPanel>
@@ -106,6 +103,15 @@
                     <TextBox x:Name="tbXCPResId" Width="75" Margin="5" Text="{Binding Path=XCPEnviroment.XCPRes, Converter={StaticResource HexString2Uint}, Mode=TwoWay}"></TextBox>
                 </StackPanel>
 
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Own Database">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="5">Own database file location </TextBlock>
+                <TextBlock Margin="5" Text="{Binding Path=XCPEnviroment.OwnDatabaseFile, Mode=TwoWay}" x:Name="tbOwnDatabaseFile" /> 
+                
+                <Button Margin="5" Content="Brower" Command="{Binding OpenOwnDatabaseCommand}" />
             </StackPanel>
         </GroupBox>
 

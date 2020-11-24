@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CES_XCP_Console"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        mc:Ignorable="d" Height="768" Width="1280" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
+        mc:Ignorable="d" Height="768" Width="1280" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" Loaded="Window_Loaded">
 
     <Grid Background="#FFEEEEEE" MouseDown="Grid_MouseDown">
         <StackPanel VerticalAlignment="Top">
@@ -41,6 +41,39 @@
                 <Image HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Source="..\Assets\CES_LOGO.png" Stretch="Fill" Width="230" Height="91"/>
             </materialDesign:TransitioningContent>
             <ListView  x:Name="ListViewMenu" Margin="0 100" Background="#FF222222" Foreground="LightGray" FontFamily="Champagne &amp; Limousines" FontSize="18" SelectionChanged="ListViewMenu_SelectionChanged" SelectedIndex="0">
+                
+                <!--
+                <ListView.Resources>
+                    
+                    <ControlTemplate x:Key="SelectedTemplate" TargetType="ListViewItem">
+                        <Border Background="#FFEEEEEE" Cursor="Hand">
+                            <TextBlock Text="{Binding Name}" Margin="5" Foreground="#FF222222" />
+                        </Border>
+                    </ControlTemplate>
+
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                
+                                <ControlTemplate TargetType="ListViewItem">
+                                    <Border Background="#FF222222" Cursor="Hand"  >
+                                        <TextBlock Text="{Binding Name}" Margin="5" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected" Value="true" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Template" Value="{StaticResource SelectedTemplate}" />
+                            </MultiTrigger>
+                        </Style.Triggers>
+                    </Style>
+
+                </ListView.Resources>
+                -->
                 <ListViewItem Height="60">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Home" Width="30" Height="30" VerticalAlignment="Center" Margin="5"/>

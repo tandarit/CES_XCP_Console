@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
- 
+
 namespace CES_XCP_Console.Model
 {
     public class XCPEnviroment :INotifyPropertyChanged
